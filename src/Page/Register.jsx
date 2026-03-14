@@ -13,22 +13,6 @@ const Register = () => {
         const photoUrl = e.target.photourl.value;
         const email = e.target.email.value;
         const password = e.target.password.value;
-        createUser(email, password)
-        .then(result => {
-            setUser(result.user);
-            updateUser({displayName: name, photoURL: photoUrl})
-            .then(() => {
-                setUser({...user, displayName: name, photoURL: photoUrl})
-                navigate('/')
-                .catch((err) => {
-                    alert('error', err);
-                    setUser(user)
-                })
-            })
-        })
-        .catch(error => {
-            alert('eError', error);
-        })
 
         if(name.length < 5){
             setNameErr('Name Should Be More then 5 Letters');
@@ -43,8 +27,25 @@ const Register = () => {
         }
         else{
             setPasswordErr('');
-            return
         }
+
+        createUser(email, password)
+        .then(result => {
+            const createdUser = result.user;
+            updateUser({displayName: name, photoURL: photoUrl})
+            .then(() => {
+                setUser({...createdUser, displayName: name, photoURL: photoUrl})
+                navigate('/')
+            })
+            .catch((err) => {
+                console.log('error', err);
+                setUser(createdUser)
+            })
+        })
+        .catch(error => {
+            console.log('eError', error);
+            alert(error.message);
+        })
     } 
 
 
@@ -69,7 +70,7 @@ const Register = () => {
                             user ? <p className='text-center text-green-400'>User Register Successfully</p> : ""
                         }
                         <div><a className="link link-hover">Forgot password?</a></div>
-                        <button type='submit' className="btn btn-neutral mt-4">Login</button>
+                        <button type='submit' className="btn btn-neutral mt-4">Register</button>
                     </fieldset>
                     <p className='text-center my-2'>Already have an account? <Link to='/auth/login' className='text-secondary font-semibold'>Login</Link></p>
                 </form>
