@@ -1,4 +1,3 @@
-import _default from "eslint-plugin-react-refresh";
 import { createBrowserRouter } from "react-router";
 import HomeLayouts from "../Layouts/HomeLayouts";
 import Home from "../Page/Home";
