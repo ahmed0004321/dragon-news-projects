@@ -1,19 +1,40 @@
 import React, { use } from 'react';
 import { NavLink } from 'react-router';
-const categoryPromise = fetch('/public/categories.json')
-.then(res => res.json());
+
+const categoryPromise = fetch('/categories.json')
+    .then(res => res.json())
+    .catch(() => []);
+
 const Categories = () => {
-    const category = use(categoryPromise);
+    const categories = use(categoryPromise);
+    
     return (
-        <div>
-            <p className='font-bold'>All Category <span className='text-secondary'>{category.length}</span></p>
-            <div className='grid grid-cols-1 gap-3 mt-5'>
-                {
-                category.map(categor => 
-                    <NavLink className='btn bg-base-100 border-0 hover:bg-secondary hover:text-white 
-                hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg' key={categor.id} to={`/category/${categor.id}`}>{categor.name}</NavLink>
-                )
-                }
+        <div className="animate-fade-in">
+            <h2 className='font-black uppercase tracking-widest text-xs text-primary/70 mb-6'>Editorial Sections</h2>
+            <div className='flex flex-col gap-1'>
+                <NavLink 
+                    to="/category/0"
+                    className={({isActive}) => `
+                        flex items-center justify-between py-3 px-5 rounded-lg text-sm font-bold transition-all
+                        ${isActive ? 'bg-secondary text-white shadow-lg scale-[1.02]' : 'text-accent hover:bg-base-200 hover:text-primary'}
+                    `}
+                >
+                    All Reports
+                    <span className="text-[10px] opacity-70">{categories.length}</span>
+                </NavLink>
+                
+                {categories.map(cat => (
+                    <NavLink 
+                        key={cat.id} 
+                        to={`/category/${cat.id}`}
+                        className={({isActive}) => `
+                            flex items-center justify-between py-3 px-5 rounded-lg text-sm font-bold transition-all
+                            ${isActive ? 'bg-secondary text-white shadow-lg scale-[1.02]' : 'text-accent hover:bg-base-200 hover:text-primary'}
+                        `}
+                    >
+                        {cat.name}
+                    </NavLink>
+                ))}
             </div>
         </div>
     );

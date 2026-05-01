@@ -9,6 +9,7 @@ import AuthLayouts from "../Layouts/AuthLayouts";
 import NewsDetails from "../Page/NewsDetails";
 import PrivateRoute from "./PrivateRoute";
 import Loading from "../Components/Loading";
+import { fetchRealNews } from "../Services/newsService";
 
 const router = createBrowserRouter([
     {
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
             {
                 path: 'category/:id',
                 element: <Categorynews></Categorynews>,
-                loader: () => fetch('/news.json'),
+                loader: ({params}) => fetchRealNews(params.id),
                 hydrateFallbackElement: <Loading></Loading>
             }
         ]
@@ -45,10 +46,10 @@ const router = createBrowserRouter([
         path: '/news-details/:id',
         element: (
             <PrivateRoute>
-            <NewsDetails></NewsDetails>
-        </PrivateRoute>
+                <NewsDetails></NewsDetails>
+            </PrivateRoute>
         ),
-        loader: () => fetch('/news.json'),
+        loader: () => fetchRealNews('0'), // Fetch top stories to find the specific one
         hydrateFallbackElement: <Loading></Loading>
     },
     {
